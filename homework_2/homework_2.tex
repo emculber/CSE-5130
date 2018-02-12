@@ -1,0 +1,231 @@
+\documentclass{report}
+\usepackage[showframe=false]{geometry}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\pagenumbering{gobble}
+
+\geometry{tmargin=60pt,bmargin=90pt,lmargin=90pt,
+rmargin=90pt}
+
+\titleformat{\chapter}{\normalfont\huge}{\thechapter.}{20pt}{\huge}
+\titlespacing*{\chapter} {0pt}{0pt}{10pt}
+
+\definecolor{cadmiumgreen}{rgb}{0.0, 0.42, 0.24}
+
+\begin{document}
+
+\chapter{Section 1}
+
+Consider  one auto  company that  receives  parts from  three suppliers;  assume  
+50\% of  the parts from  supplier  1,  30\% from  supplier  2,  and 20\% from  supplier  3.  
+The quality of  the parts could be  summarized  in  the following table based on  
+historically  data.
+
+\begin{center}
+  \begin{tabular}{ | c | c | c | } 
+    \hline
+      & Percentage Good Parts & Percentage Bad parts \\ 
+    \hline
+    Supplier 1 & 98 & 2 \\ 
+    \hline
+    Supplier 2 & 95 & 5 \\ 
+    \hline
+    Supplier 3 & 92 & 8 \\ 
+    \hline
+  \end{tabular}
+\end{center}
+
+Question: A bad part  broke one of  the machines  (observed), what  is  the 
+probability the part  came  from  supplier  1?
+
+\hspace{1cm}
+
+\textbf{ANSWER:} \\
+
+Let $A_1$ denote Supplier 1, $A_2$ denote Supplier 2, and $A_3$ denote Supplier 3
+
+\begin{equation} \label{eq3}
+  \begin{split}
+    P(A_1) & = 0.50 \\
+    P(A_2) & = 0.30 \\
+    P(A_3) & = 0.20 \\
+  \end{split}
+\end{equation}
+
+Let G denote that a part is good and B denote that a part is bad. \\
+
+\begin{equation} \label{eq3}
+  \begin{split}
+    P(G|A_1) & = 0.98 \\
+    P(G|A_2) & = 0.95 \\
+    P(G|A_3) & = 0.92 \\
+  \end{split}
+\end{equation}
+
+\begin{equation} \label{eq3}
+  \begin{split}
+    P(B|A_1) & = 0.02 \\
+    P(B|A_2) & = 0.05 \\
+    P(B|A_3) & = 0.08 \\
+  \end{split}
+\end{equation}
+
+\break
+
+Here is the Probability Tree for Three-Suppliers
+
+\hspace{1cm}
+
+% Set the overall layout of the tree
+\tikzstyle{level 1}=[level distance=3.5cm, sibling distance=3.5cm]
+\tikzstyle{level 2}=[level distance=3.5cm, sibling distance=2cm]
+
+% Define styles for bags and leafs
+\tikzstyle{bag} = [circle, minimum width=3pt, fill, inner sep=0pt]
+\tikzstyle{end} = [circle, minimum width=3pt, fill, inner sep=0pt]
+
+% The sloped option gives rotated edge labels. Personally
+% I find sloped labels a bit difficult to read. Remove the sloped options
+% to get horizontal labels. 
+\begin{tikzpicture}[grow=right, sloped]
+  \node[bag] {$\circ$}
+  child {
+    node[bag] {$\circ$}
+    child {
+      node[end, label=right:
+      {$P(A_3\cap B)=P(A_3)P(B|A_3)=0.016$}] {}
+      edge from parent
+      node[above] {$P(B|A_3)$}
+    node[below]  {\textcolor{red}{$0.08$}}
+    }
+    child {
+      node[end, label=right:
+      {$P(A_3\cap G)=P(A_3)P(G|A_3)=0.184$}] {}
+      edge from parent
+      node[above] {$P(G|A_3)$}
+      node[below]  {\textcolor{cadmiumgreen}{$0.92$}}
+    }
+    edge from parent 
+    node[above] {$P(A_3)$}
+    node[below]  {\textcolor{blue}{$0.20$}}
+  } child {
+    node[bag] {$\circ$}
+    child {
+      node[end, label=right:
+      {$P(A_2\cap B)=P(A_2)P(B|A_2)=0.015$}] {}
+      edge from parent
+      node[above] {$P(B|A_2)$}
+      node[below]  {\textcolor{red}{$0.05$}}
+    }
+    child {
+      node[end, label=right:
+      {$P(A_2\cap G)=P(A_2)P(G|A_2)=0.285$}] {}
+      edge from parent
+      node[above] {$P(G|A_2)$}
+      node[below]  {\textcolor{cadmiumgreen}{$0.95$}}
+    }
+    edge from parent         
+    node[above] {$P(A_2)$}
+    node[below]  {\textcolor{blue}{$0.30$}}
+  } child {
+    node[bag] {$\circ$}
+    child {
+      node[end, label=right:
+      {$P(A_1\cap B)=P(A_1)P(B|A_1)=0.010$}] {}
+      edge from parent
+      node[above] {$P(B|A_1)$}
+      node[below]  {\textcolor{red}{$0.02$}}
+    }
+    child {
+      node[end, label=right:
+      {$P(A_1\cap G)=P(A_1)P(G|A_1)=0.490$}] {}
+      edge from parent
+      node[above] {$P(G|A_1)$}
+      node[below]  {\textcolor{cadmiumgreen}{$0.98$}}
+    }
+    edge from parent         
+    node[above] {$P(A_1)$}
+    node[below]  {\textcolor{blue}{$0.50$}}
+  };
+\end{tikzpicture}
+
+\hspace{1cm}
+
+Law of Conditional Probability gives us the following equation
+
+\begin{equation} \label{eq3}
+  P(A_1|B) = \frac{P(A_1\cap B)}{P(B)}
+\end{equation}
+
+We know from are probability tree that
+
+\begin{equation} \label{eq3}
+P(A_1\cap B)=P(A_1)P(B|A_1)=0.010
+\end{equation}
+
+We also know that
+
+\begin{equation} \label{eq3}
+  P(B) = P(A_1\cap B) + P(A_2\cap B) + P(A_3\cap B) = P(A_1)P(B|A_1) + P(A_2)P(B|A_2) + P(A_3)P(B|A_3)
+\end{equation}
+
+Combining are equations togther we obtain Bayes' Theorem
+
+\begin{equation}
+  \begin{split}
+    & 1 \leq k \leq n \\
+    P(B_k|A) & = \frac{P(A|B_k)P(B_k)}{\sum_{i=1}^{n}P(A|B_i)P(B_i)}
+  \end{split}
+\end{equation}
+
+\begin{equation}
+  \begin{split}
+    P(A_1|B) & = \frac{P(A_1)P(B|A_1)}{P(A_1)P(B|A_1)+P(A_2)P(B|A_2)+P(A_3)P(B|A_3)} \\
+    P(A_2|B) & = \frac{P(A_2)P(B|A_2)}{P(A_1)P(B|A_1)+P(A_2)P(B|A_2)+P(A_3)P(B|A_3)} \\
+    P(A_3|B) & = \frac{P(A_3)P(B|A_3)}{P(A_1)P(B|A_1)+P(A_2)P(B|A_2)+P(A_3)P(B|A_3)} \\
+  \end{split}
+\end{equation}
+
+\break
+
+Now all we have to do is plug in the numbers and solve the equations
+
+\begin{equation}
+  \begin{split}
+  P(A_1|B) & = \frac{(0.50)(0.02)}{(0.50)(0.02)+(0.30)(0.05) +(0.20)(0.08)} = \frac{0.010}{0.041} = 0.2439024390 \\
+  P(A_2|B) & = \frac{(0.30)(0.05)}{(0.50)(0.02)+(0.30)(0.05) +(0.20)(0.08)} = \frac{0.015}{0.041} = 0.3658536585 \\
+  P(A_3|B) & = \frac{(0.20)(0.08)}{(0.50)(0.02)+(0.30)(0.05) +(0.20)(0.08)} = \frac{0.016}{0.041} = 0.3902439024 \\
+  \end{split}
+\end{equation}
+
+Therefore the probability the part came from supplier 1: 0.243902439
+
+\chapter{Section 2}
+
+For the play  tennis  data  set shown below:
+
+\begin{tabular}{ |c||c c c c | c | }
+  \hline
+  Day & Outlook & Temperature & Humidity & Wind & PlayTennis \\
+  \hline
+  D1  & Sunny    & Hot  & High   & Weak   & No \\
+  D2  & Sunny    & Hot  & High   & Strong & No \\
+  D3  & Overcast & Hot  & High   & Weak   & Yes \\
+  D4  & Rain     & Mild & High   & Weak   & Yes \\
+  D5  & Rain     & Cool & Normal & Weak   & Yes \\
+  D6  & Rain     & Cool & Normal & Strong & No \\
+  D7  & Overcast & Cool & Normal & Strong & Yes \\
+  D8  & Sunny    & Mild & High   & Weak   & No \\
+  D9  & Sunny    & Cool & Normal & Weak   & Yes \\
+  D10 & Rain     & Mild & Normal & Weak   & Yes \\
+  D11 & Sunny    & Mild & Normal & Strong & Yes \\
+  D12 & Overcast & Mild & High   & Strong & Yes \\
+  D13 & Overcast & Hot  & Normal & Weak   & Yes \\
+  D14 & Rain     & Mild & High   & Strong & No \\
+  \hline
+\end{tabular}
+
+\end{document}
