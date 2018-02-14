@@ -894,25 +894,418 @@ please	build	the	kd-tree.
     \end{axis}
   \end{tikzpicture}
 
-
-Starting with x we will compute are first boundary. 
+  First we will construct the boundry lines then construct the graph from that.
+Starting with x we will compute are first boundary the we will compute the y median and repeat. 
 
 \begin{equation*}
-   x_{med} = 1 + 2 + 3 + 4 + 4+5+6+8+10+12+15+17
+  x_{med} = \frac{1+2+3+4+4+5+6+8+10+12+15+17}{12}=\frac{87}{12} = 7.25
 \end{equation*}
 
+\begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+      };
+      \draw [very thick,dotted] (72.5,0) -- (72.5,200);
+    \end{axis}
+  \end{tikzpicture}
+
+\begin{equation*}
+  y1_{med} = \frac{3+5+15+8+19+6+13}{7}=\frac{69}{7} = 9.8571
+  y2_{med} = \frac{6+15+7+4+18}{5}=\frac{50}{5} = 10
+\end{equation*}
+
+\begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+      };
+      \draw [very thick,dotted] (72.5,0) -- (72.5,200);
+      \draw [very thick,dotted] (0,98.571) -- (72.5,98.571);
+      \draw [very thick,dotted] (72.5,100) -- (200,100);
+    \end{axis}
+  \end{tikzpicture}
+
+  \begin{equation*}
+    \begin{split}
+      x1_{med} & = \frac{1+2+4+5}{4}=\frac{12}{4} = 3 \\
+      x2_{med} & = \frac{8+12+15}{3}=\frac{35}{3} = 11.667 \\
+      x3_{med} & = \frac{10+17}{2}=\frac{27}{2} = 13.5 \\
+      x4_{med} & = \frac{3+4+6}{3}=\frac{13}{3} = 4.333 \\
+    \end{split}
+  \end{equation*}
+
+\begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+      };
+      \draw [very thick,dotted] (72.5,0) -- (72.5,200);
+
+      \draw [very thick,dotted] (0,98.571) -- (72.5,98.571);
+      \draw [very thick,dotted] (72.5,100) -- (200,100);
+
+      \draw [very thick,dotted] (30,0) -- (30,99.1667);
+      \draw [very thick,dotted] (116.67,0) -- (116.67,99.1667);
+      \draw [very thick,dotted] (135,99.1667) -- (135,200);
+      \draw [very thick,dotted] (43.33,99.1667) -- (43.33,200);
+
+    \end{axis}
+  \end{tikzpicture}
+
+\begin{equation*}
+  y1_{med} = \frac{15+19}{2}=\frac{34}{2} = 17
+  y2_{med} = \frac{3+5}{2}=\frac{8}{2} = 4
+  y3_{med} = \frac{8+6}{2}=\frac{14}{2} = 7
+  y4_{med} = \frac{7+4}{2}=\frac{11}{2} = 5.5
+\end{equation*}
+
+\begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+      };
+      \draw [very thick,dotted] (72.5,0) -- (72.5,200);
+
+      \draw [very thick,dotted] (0,98.571) -- (72.5,98.571);
+      \draw [very thick,dotted] (72.5,100) -- (200,100);
+
+      \draw [very thick,dotted] (30,0) -- (30,99.1667);
+      \draw [very thick,dotted] (116.67,0) -- (116.67,99.1667);
+      \draw [very thick,dotted] (135,99.1667) -- (135,200);
+      \draw [very thick,dotted] (43.33,99.1667) -- (43.33,200);
+
+      \draw [very thick,dotted] (0,170) -- (43.33,170);
+      \draw [very thick,dotted] (0,40) -- (30,40);
+      \draw [very thick,dotted] (30,70) -- (72.5,70);
+      \draw [very thick,dotted] (116.67,55) -- (200,55);
+    \end{axis}
+  \end{tikzpicture}
+
+  With all this infomation we can construct the graph
+
+\begin{tikzpicture}[x=.035\textwidth,y=.035\textwidth]
+       \node[simple] (1) {X 10};
+       
+      \draw[->] (1.center) ++(0, -10pt) -- +(-6,-2) node[simple] (2) {Y 9.8571}; 
+       \draw[->] (1.center) ++(0, -10pt) -- +(+6,-2) node[simple] (3) {Y 10}; 
+
+       \draw[->] (2.center) ++(0, -10pt) -- +(-4,-2) node[simple] (4) {X 3}; 
+       \draw[->] (2.center) ++(0, -10pt) -- +(+4,-2) node[simple] (5) {X 4.33}; 
+       \draw[->] (3.center) ++(0, -10pt) -- +(-4,-2) node[simple] (6) {X 11.667}; 
+       \draw[->] (3.center) ++(0, -10pt) -- +(+4,-2) node[simple] (7) {X 13.5}; 
+
+       \draw[->] (4.center) ++(0, -10pt) -- +(-2,-2) node[simple] (8) {Y 4}; 
+       \draw[->] (4.center) ++(0, -10pt) -- +(+2,-2) node[simple] (9) {Y 7}; 
+       \draw[->] (5.center) ++(0, -10pt) -- +(-2,-2) node[simple] (10) {Y 17}; 
+       \draw[->] (6.center) ++(0, -10pt) -- +(+2,-2) node[simple] (11) {Y 5.5}; 
+
+       \draw[->] (5.center) ++(0, -10pt) -- +(0,-2) node[simple] (18) {g}; 
+       \draw[->] (6.center) ++(0, -10pt) -- +(0,-2) node[simple] (19) {h}; 
+       \draw[->] (7.center) ++(0, -10pt) -- +(-1,-2) node[simple] (19) {i}; 
+       \draw[->] (7.center) ++(0, -10pt) -- +(+1,-2) node[simple] (19) {l}; 
+       \draw[->] (8.center) ++(0, -10pt) -- +(-1,-2) node[simple] (12) {a}; 
+       \draw[->] (8.center) ++(0, -10pt) -- +(+1,-2) node[simple] (13) {b}; 
+       \draw[->] (9.center) ++(0, -10pt) -- +(-1,-2) node[simple] (17) {f}; 
+       \draw[->] (9.center) ++(0, -10pt) -- +(+1,-2) node[simple] (15) {d}; 
+       \draw[->] (10.center) ++(0, -10pt) -- +(-1,-2) node[simple] (14) {c}; 
+       \draw[->] (10.center) ++(0, -10pt) -- +(+1,-2) node[simple] (16) {e}; 
+       \draw[->] (11.center) ++(0, -10pt) -- +(-1,-2) node[simple] (19) {k}; 
+       \draw[->] (11.center) ++(0, -10pt) -- +(+1,-2) node[simple] (19) {j}; 
+       
+  \end{tikzpicture}
+
 \section{Part 2}	
-5.2.	using the	kd-tree	learnt	in	5.1	to	find	the	nearest	neighbor	of	data	point	(11,	
+using the	kd-tree	learnt	in	5.1	to	find	the	nearest	neighbor	of	data	point	(11,	
 16).
+
+\begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+        n  11 16
+      };
+      \draw [very thick,dotted] (72.5,0) -- (72.5,200);
+
+      \draw [very thick,dotted] (0,98.571) -- (72.5,98.571);
+      \draw [very thick,dotted] (72.5,100) -- (200,100);
+
+      \draw [very thick,dotted] (30,0) -- (30,99.1667);
+      \draw [very thick,dotted] (116.67,0) -- (116.67,99.1667);
+      \draw [very thick,dotted] (135,99.1667) -- (135,200);
+      \draw [very thick,dotted] (43.33,99.1667) -- (43.33,200);
+
+      \draw [very thick,dotted] (0,170) -- (43.33,170);
+      \draw [very thick,dotted] (0,40) -- (30,40);
+      \draw [very thick,dotted] (30,70) -- (72.5,70);
+      \draw [very thick,dotted] (116.67,55) -- (200,55);
+    \end{axis}
+  \end{tikzpicture}
+
+  Using the kd-tree to find nearest neighbor we will traverse the tree and end up on the far right side on the leaf node l. Checking the surounding area we can see that l is the true nearest neighbor.
+
 
 \chapter{Question 6}
 
 For	the	play	tennis	data	set	shown	below.
 
+\begin{tabular}{ |c||c c c c | c | }
+  \hline
+  Day & Outlook & Temperature & Humidity & Wind & PlayTennis \\
+  \hline
+  D1  & Sunny                     & Hot                   & High                    & Weak                    & No                   \\
+  D2  & Sunny                     & Hot                   & High                    & Strong                  & No                   \\
+  D3  & \textcolor{red}{Overcast} & \textcolor{red}{Hot}  & \textcolor{red}{High}   & \textcolor{red}{Weak}   & \textcolor{red}{Yes} \\
+  D4  & \textcolor{red}{Rain}     & \textcolor{red}{Mild} & \textcolor{red}{High}   & \textcolor{red}{Weak}   & \textcolor{red}{Yes} \\
+  D5  & \textcolor{red}{Rain}     & \textcolor{red}{Cool} & \textcolor{red}{Normal} & \textcolor{red}{Weak}   & \textcolor{red}{Yes} \\
+  D6  & Rain                      & Cool                  & Normal                  & Strong                  & No                   \\
+  D7  & \textcolor{red}{Overcast} & \textcolor{red}{Cool} & \textcolor{red}{Normal} & \textcolor{red}{Strong} & \textcolor{red}{Yes} \\
+  D8  & Sunny                     & Mild                  & High                    & Weak                    & No                   \\
+  D9  & \textcolor{red}{Sunny}    & \textcolor{red}{Cool} & \textcolor{red}{Normal} & \textcolor{red}{Weak}   & \textcolor{red}{Yes} \\
+  D10 & \textcolor{red}{Rain}     & \textcolor{red}{Mild} & \textcolor{red}{Normal} & \textcolor{red}{Weak}   & \textcolor{red}{Yes} \\
+  D11 & \textcolor{red}{Sunny}    & \textcolor{red}{Mild} & \textcolor{red}{Normal} & \textcolor{red}{Strong} & \textcolor{red}{Yes} \\
+  D12 & \textcolor{red}{Overcast} & \textcolor{red}{Mild} & \textcolor{red}{High}   & \textcolor{red}{Strong} & \textcolor{red}{Yes} \\
+  D13 & \textcolor{red}{Overcast} & \textcolor{red}{Hot}  & \textcolor{red}{Normal} & \textcolor{red}{Weak}   & \textcolor{red}{Yes} \\
+  D14 & Rain                      & Mild                  & High                    & Strong                  & No                   \\
+  \hline
+\end{tabular}
+
 \section{Part 1}
 build	the	decision	tree	by	using	information	gain.
 
+First we must calculate the entropy of all the classes
+
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  \textbf{OUTLOOK} & Play=Yes & Play=No & Total \\
+  \hline
+  Sunny            & 2/9      & 3/5     & 5/14  \\
+  \hline
+  Overcast         & 4/9      & 0/5     & 4/14  \\
+  \hline
+  Rain             & 3/9      & 2/5     & 5/14  \\
+  \hline
+\end{tabular}
+
+\vspace*{1 cm}
+
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  \textbf{TEMPERATURE} & Play=Yes & Play=No & Total \\
+  \hline
+  Hot                  & 2/9      & 2/5     & 4/14  \\
+  \hline
+  Mild                 & 4/9      & 2/5     & 6/14  \\
+  \hline
+  Cool                 & 3/9      & 1/5     & 4/14  \\
+  \hline
+\end{tabular}
+
+\vspace*{1 cm}
+
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  \textbf{HUMIDITY} & Play=Yes & Play=No & Total \\
+  \hline
+  High              & 3/9      & 4/5     & 7/14  \\
+  \hline
+  Normal            & 6/9      & 1/5     & 7/14  \\
+  \hline
+\end{tabular}
+
+\vspace*{1 cm}
+
+\begin{tabular}{ |c|c|c|c| }
+  \hline
+  \textbf{WIND} & Play=Yes & Play=No & Total \\
+  \hline
+  Strong        & 3/9      & 3/5     & 6/14  \\
+  \hline
+  Weak          & 6/9      & 2/5     & 8/14  \\
+  \hline
+\end{tabular}
+
+\begin{equation*}
+  \begin{split}
+    P(Play=Yes) & = 9/14 \\
+    P(Play=No)  & = 5/14 \\
+  \end{split}
+\end{equation*}
+
+\begin{equation*}
+  \begin{split}
+    Entropy(PlayTennis) & = -(5/14 * \log_2 5/14) - (9/14 * \log_2 9/14) = 0.94 \\
+    Entropy(PlayTennis, Outlook) & \\
+    & = P(Sunny) * Entropy(Sunny) + P(Overcast) * Entropy(Overcast) + P(Rainy) * Entropy(Rainy)  \\
+    & = (5/14) * 0.971 + (4/14) * 0.0 + (5/14)*0.971 = 0.693 \\
+    Entropy(PlayTennis, Temperature) &  \\
+    & = P(Hot) * Entropy(Hot) + P(Mild) * Entropy(Mild) + P(Cool) * Entropy(Cool) \\
+    & = (4/14) * 1 + (6/14) * 0.9183 + (4/14)*0.811 = 0.911 \\
+    Entropy(PlayTennis, Humidity) &  \\
+    & = P(High) * Entropy(High) + P(Normal) * Entropy(Normal) \\
+    & = (7/14) * 0.985 + (7/14) * 0.5917 = 0.78835 \\
+    Entropy(PlayTennis, Wind) &  \\
+    & = P(Strong) * Entropy(Srong) + P(Weak) * Entropy(Weak) \\
+    & = (6/14) * 1 + (8/14) * 0.8113 = 0.8922 \\
+  \end{split}
+\end{equation*}
+
+\begin{equation*}
+  \begin{split}
+    Gain(PlayTennis, Outlook) & \\ 
+    & = Entropy(PlayTennis) - Entropy(PlayTennis, Outlook) \\
+    & = 0.94 - 0.693 = 0.247 \\
+    Gain(PlayTennis, Temperature) & \\
+    & = Entropy(PlayTennis) - Entropy(PlayTennis, Temperature) \\
+    & = 0.94 - 0.911 = 0.029 \\
+    Gain(PlayTennis, Humidity) & \\
+    & = Entropy(PlayTennis) - Entropy(PlayTennis, Humidity) \\
+    & = 0.94 - 0.78835 = 0.15165 \\
+    Gain(PlayTennis, Wind) & \\
+    & = Entropy(PlayTennis) - Entropy(PlayTennis, Wind) \\
+    & = 0.94 - 0.8922 = 0.0478 \\
+  \end{split}
+\end{equation*}
+
+By looking at the leftover events now that we know Overcast has the most entropy and is the root we can see that when it is Sunny the catigory with the highest entropy is Humidity and similarly when it is rainy the highest entropy is Wind
+
+\begin{tikzpicture}[x=.035\textwidth,y=.035\textwidth]
+       \node[simple] (1) {Outlook};
+       
+      \draw[->] (1.center) ++(0, -10pt) -- +(-6,-2) node[simple] (2) {Sunny}; 
+       \draw[->] (1.center) ++(0, -10pt) -- +(0,-2) node[simple] (3) {Overcast}; 
+       \draw[->] (3.center) ++(0, -10pt) -- +(0,-2) node[simple] (5) {Play=Yes}; 
+       \draw[->] (1.center) ++(0, -10pt) -- +(+6,-2) node[simple] (4) {Rainy}; 
+       \draw[->] (2.center) ++(0, -10pt) -- +(0,-2) node[simple] (6) {Humidity}; 
+       \draw[->] (6.center) ++(0, -10pt) -- +(-3,-2) node[simple] (8) {High Play=No}; 
+       \draw[->] (6.center) ++(0, -10pt) -- +(+3,-2) node[simple] (9) {Weak Play=Yes}; 
+       \draw[->] (4.center) ++(0, -10pt) -- +(0,-2) node[simple] (7) {Wind}; 
+       \draw[->] (7.center) ++(0, -10pt) -- +(-3,-2) node[simple] (10) {Strong Play=No}; 
+       \draw[->] (7.center) ++(0, -10pt) -- +(+3,-2) node[simple] (11) {Weak Play=Yes}; 
+       
+  \end{tikzpicture}
+
 \section{Part 2}
-6.2.	build	the	decision	tree	by	using	information	content.
+build	the	decision	tree	by	using	information	content.
 
 \end{document}
