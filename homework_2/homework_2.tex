@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{tikz,pgfplots}
+\usepackage{multicol}
 
 \usepgfplotslibrary{fillbetween}
 \usepgfplotslibrary{groupplots}
@@ -442,42 +443,39 @@ Given the following 12  data  points x=(x1, x2) in  the training  data  set.
 If  we  know  the value range of  features  x1, x2  is  in  [0, 20],  please  build the 
 quadtree. 
 
-\pgfmathsetmacro{\wdbox}{.02\textwidth}
-\tikzset{
-  >= stealth, 
-  every picture/.style={ultra thick},
-  every node/.style={anchor=north},
-  simple/.style={draw,minimum size=3*\wdbox,scale=.8},
-  array/.style={%
-              draw,scale=.8, 
-              inner sep=\wdbox, 
-              rounded corners,
-              rectangle, 
-              rectangle split, 
-              rectangle split parts=4,
-              rectangle split ignore empty parts=false, 
-              rectangle split horizontal,
-              append after command={%
-              \pgfextra{\let\mainnode=\tikzlastnode} 
-              coordinate (c1 \mainnode) at ($(\mainnode.west)!.5!(\mainnode.one split)$)
-              coordinate (c2 \mainnode) at ($(\mainnode.one split)!.5!(\mainnode.two split)$)
-              coordinate (c3 \mainnode) at ($(\mainnode.two split)!.5!(\mainnode.three split)$)
-              coordinate (c4 \mainnode) at ($(\mainnode.three split)!.5!(\mainnode.east)$)                
-                    }
-                  }
-                }
+Quadtree algorithm, A quadtree for a set of points P in a square
+\begin{equation*}
+  \begin{split}
+    Q & = [x_{1q} : x_{2q}] * [y_{1q} : y_{2q}] \\
+  \end{split}
+\end{equation*}
 
-  \begin{tikzpicture}[x=.035\textwidth,y=.035\textwidth]
-       \node[simple] (1) {};
-       \draw[->] (1.center) -- +( 0,-2) node[array]  (2) {};
-       \draw[->] (c1 2)     -- +(-3,-2) node[simple] (3) {};
-       \draw[->] (c2 2)     -- +(-1,-2) node[simple] (4) {};  
-       \draw[->] (c3 2)     -- +( 0,-2) node         (5) {$\emptyset$};
-       \draw[->] (c4 2)     -- +(+3,-2) node[simple] (6) {};
-       \draw[->] (3.center) -- +( 0,-2) node[array]  (7) {};         
-       \draw[->] (4.center) -- +( 0,-2) node         (8) {$\emptyset$};       
-       \draw[->] (c1 7)     -- +(-3,-2) node[simple] (9) {};
-  \end{tikzpicture}
+\begin{equation*}
+  \begin{split}
+    Q_{NE} & = \{p \in P : p_x > x_{mid} \land p_y > y_{mid}\} \\
+    Q_{NW} & = \{p \in P : p_x \leq x_{mid} \land p_y > y_{mid}\} \\
+    Q_{SW} & = \{p \in P : p_x \leq x_{mid} \land p_y \leq y_{mid}\} \\
+    Q_{SE} & = \{p \in P : p_x > x_{mid} \land p_y \leq y_{mid}\} \\
+  \end{split}
+\end{equation*}
+
+\begin{equation*}
+  \begin{split}
+    x_{mid} & = (x_{1q} + x_{2q})/2 \\
+    y_{mid} & = (y_{1q} + y_{2q})/2 \\
+  \end{split}
+\end{equation*}
+
+The starting root quadrents are
+
+\begin{equation*}
+  \begin{split}
+    x_{mid} & = 10 \\
+    y_{mid} & = 10
+  \end{split}
+\end{equation*}
+
+Given the points we can calculate what quadrent they are in
 
   \pgfkeys{
     /prepare label/.style={
@@ -487,15 +485,11 @@ quadtree.
   }
 
   \begin{tikzpicture}
-    \begin{axis}[%
-        axis background/.style={%
-          preaction={
-            path picture={
-              \fill [black!20] (axis cs:-6,0) rectangle (axis cs:0,20);
-              \fill [blue!20] (axis cs:6,0) rectangle (axis cs:0,20);
-            }
-          }
-        }
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
       ]
       \addplot[
         mark=*,
@@ -522,8 +516,403 @@ quadtree.
     \end{axis}
   \end{tikzpicture}
 
+  \break
+
+  \begin{multicols}{2}
+    \begin{equation*}
+      \begin{split}
+        a : (1, 3) : & \\
+             Q_{NE} & = \{1 > 10 \land 3 > 10\} \\
+             Q_{NW} & = \{1 \leq 10 \land 3 > 10\} \\
+             -> Q_{SW} & = \{1 \leq 10 \land 3 \leq 10\} \\
+             Q_{SE} & = \{1 > 10 \land 3 \leq 10\} \\
+        b : (2, 5) : & \\
+             Q_{NE} & = \{2 > 10 \land 5 > 10\} \\
+             Q_{NW} & = \{2 \leq 10 \land 5 > 10\} \\
+             ->Q_{SW} & = \{2 \leq 10 \land 5 \leq 10\} \\
+             Q_{SE} & = \{2 > 10 \land 5 \leq 10\} \\
+        c : (3, 15) : \\
+             Q_{NE} & = \{3 > 10 \land 15 > 10\} \\
+             ->Q_{NW} & = \{3 \leq 10 \land 15 > 10\} \\
+             Q_{SW} & = \{3 \leq 10 \land 15 \leq 10\} \\
+             Q_{SE} & = \{3 > 10 \land 15 \leq 10\} \\
+        d : (4, 8) : \\
+             Q_{NE} & = \{4 > 10 \land 8 > 10\} \\
+             Q_{NW} & = \{4 \leq 10 \land 8 > 10\} \\
+             ->Q_{SW} & = \{4 \leq 10 \land 8 \leq 10\} \\
+             Q_{SE} & = \{4 > 10 \land 8 \leq 10\} \\
+        e : (4, 19) : \\
+             Q_{NE} & = \{4 > 10 \land 19 > 10\} \\
+             ->Q_{NW} & = \{4 \leq 10 \land 19 > 10\} \\
+             Q_{SW} & = \{4 \leq 10 \land 19 \leq 10\} \\
+             Q_{SE} & = \{4 > 10 \land 19 \leq 10\} \\
+        f : (5, 6) : \\
+             Q_{NE} & = \{5 > 10 \land 6 > 10\} \\
+             Q_{NW} & = \{5 \leq 10 \land 6 > 10\} \\
+             ->Q_{SW} & = \{5 \leq 10 \land 6 \leq 10\} \\
+             Q_{SE} & = \{5 > 10 \land 6 \leq 10\} \\
+      \end{split}
+    \end{equation*}\break
+      \begin{equation*}
+        \begin{split}
+          g : (6, 13) : \\
+             Q_{NE} & = \{6 > 10 \land 13 > 10\} \\
+             ->Q_{NW} & = \{6 \leq 10 \land 13 > 10\} \\
+             Q_{SW} & = \{6 \leq 10 \land 13 \leq 10\} \\
+             Q_{SE} & = \{6 > 10 \land 13 \leq 10\} \\
+          h : (8, 6) : \\
+             Q_{NE} & = \{8 > 10 \land 6 > 10\} \\
+             Q_{NW} & = \{8 \leq 10 \land 6 > 10\} \\
+             ->Q_{SW} & = \{8 \leq 10 \land 6 \leq 10\} \\
+             Q_{SE} & = \{8 > 10 \land 6 \leq 10\} \\
+          i : (10, 15) : \\
+             Q_{NE} & = \{10 > 10 \land 15 > 10\} \\
+             ->Q_{NW} & = \{10 \leq 10 \land 15 > 10\} \\
+             Q_{SW} & = \{10 \leq 10 \land 15 \leq 10\} \\
+             Q_{SE} & = \{10 > 10 \land 15 \leq 10\} \\
+          j : (12, 7) : \\
+             Q_{NE} & = \{12 > 10 \land 7 > 10\} \\
+             Q_{NW} & = \{12 \leq 10 \land 7 > 10\} \\
+             Q_{SW} & = \{12 \leq 10 \land 7 \leq 10\} \\
+             ->Q_{SE} & = \{12 > 10 \land 7 \leq 10\} \\
+          k : (15, 4) : \\
+             Q_{NE} & = \{15 > 10 \land 4 > 10\} \\
+             Q_{NW} & = \{15 \leq 10 \land 4 > 10\} \\
+             Q_{SW} & = \{15 \leq 10 \land 4 \leq 10\} \\
+             ->Q_{SE} & = \{15 > 10 \land 4 \leq 10\} \\
+          l : (17, 18) : \\
+             ->Q_{NE} & = \{17 > 10 \land 18 > 10\} \\
+             Q_{NW} & = \{17 \leq 10 \land 18 > 10\} \\
+             Q_{SW} & = \{17 \leq 10 \land 18 \leq 10\} \\
+             Q_{SE} & = \{17 > 10 \land 18 \leq 10\} \\
+        \end{split}
+      \end{equation*}
+  \end{multicols}
+
+  \break
+
+  Now we can generate are first graph using the root split
+
+  \begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+      };
+      \draw [very thick,dotted] (100,0) -- (100,200);
+      \draw [very thick,dotted] (0,100) -- (200,100);
+    \end{axis}
+  \end{tikzpicture}
+
+\pgfmathsetmacro{\wdbox}{.02\textwidth}
+\tikzset{
+  >= stealth, 
+  every picture/.style={ultra thick},
+  every node/.style={anchor=north},
+  simple/.style={draw,minimum size=3*\wdbox,scale=.8},
+  array/.style={%
+              draw,scale=.8, 
+              inner sep=\wdbox, 
+              rounded corners,
+              rectangle, 
+              rectangle split, 
+              rectangle split parts=4,
+              rectangle split ignore empty parts=false, 
+              rectangle split horizontal,
+              append after command={%
+              \pgfextra{\let\mainnode=\tikzlastnode} 
+              coordinate (c1 \mainnode) at ($(\mainnode.west)!.5!(\mainnode.one split)$)
+              coordinate (c2 \mainnode) at ($(\mainnode.one split)!.5!(\mainnode.two split)$)
+              coordinate (c3 \mainnode) at ($(\mainnode.two split)!.5!(\mainnode.three split)$)
+              coordinate (c4 \mainnode) at ($(\mainnode.three split)!.5!(\mainnode.east)$)                
+                    }
+                  }
+                }
+  \begin{tikzpicture}[x=.035\textwidth,y=.035\textwidth]
+       \node[simple] (1) {X 10, Y 10};
+       \draw[->] (1.center) ++(0, -10pt) -- +(-4,-2) node[simple] (2) {a,b,d,f,h};
+       \draw[->] (1.center) ++(0, -10pt) -- +(-1,-2) node[simple] (3) {j,k};  
+       \draw[->] (1.center) ++(0, -10pt) -- +(+1,-2) node[simple] (4) {l};
+       \draw[->] (1.center) ++(0, -10pt) -- +(+4,-2) node[simple] (5) {e,c,g,i};
+  \end{tikzpicture}
+
+Now that we can see that $Q_{SW}$ and $Q_{NW}$ has to many elements so we will break down these two quadrants. First we need to calculate the new mid points for the two quadrant.
+
+\begin{equation*}
+  \begin{split}
+  Q_{SW} : & \\
+    x_{mid} & = 5 \\
+    y_{mid} & = 5 \\
+   Q_{NW} : & \\
+    x_{mid} & = 5 \\
+    y_{mid} & = 15
+  \end{split}
+\end{equation*}
+
+Given the points we can calculate what points are in the new quadrants
+
+  \pgfkeys{
+    /prepare label/.style={
+      /print label/\detokenize{#1}/.code={\ttfamily\detokenize{#1}}
+    },
+    /prepare label/.list={a,b,c,d,e,f,g,h,i,j,k,l,n}
+  }
+
+  \begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+      };
+       \draw [very thick,dotted] (100,0) -- (100,200);
+      \draw [very thick,dotted] (0,100) -- (200,100);
+      
+       \draw [very thick,dotted] (50,0) -- (50,100);
+      \draw [very thick,dotted] (0,50) -- (100,50);
+      
+      \draw [very thick,dotted] (50,100) -- (50,200);
+      \draw [very thick,dotted] (0,150) -- (100,150);
+    \end{axis}
+  \end{tikzpicture}
+
+  \break
+
+  \begin{multicols}{2}
+    \begin{equation*}
+      \begin{split}
+      Q_{SW} : (5, 5) & \\
+        a : (1, 3) : & \\
+             Q_{NE} & = \{1 > 5 \land 3 > 5\} \\
+             Q_{NW} & = \{1 \leq 5 \land 3 > 5\} \\
+             ->Q_{SW} & = \{1 \leq 5 \land 3 \leq 5\} \\
+             Q_{SE} & = \{1 > 5 \land 3 \leq 5\} \\
+        b : (2, 5) : & \\
+             Q_{NE} & = \{2 > 5 \land 5 > 5\} \\
+             Q_{NW} & = \{2 \leq 5 \land 5 > 5\} \\
+             ->Q_{SW} & = \{2 \leq 5 \land 5 \leq 5\} \\
+             Q_{SE} & = \{2 > 5 \land 5 \leq 5\} \\
+        d : (4, 8) : \\
+             Q_{NE} & = \{4 > 5 \land 8 > 5\} \\
+             ->Q_{NW} & = \{4 \leq 5 \land 8 > 5\} \\
+             Q_{SW} & = \{4 \leq 5 \land 8 \leq 5\} \\
+             Q_{SE} & = \{4 > 5 \land 8 \leq 5\} \\
+        f : (5, 6) : \\
+             Q_{NE} & = \{5 > 5 \land 6 > 5\} \\
+             ->Q_{NW} & = \{5 \leq 5 \land 6 > 5\} \\
+             Q_{SW} & = \{5 \leq 5 \land 6 \leq 5\} \\
+             Q_{SE} & = \{5 > 5 \land 6 \leq 5\} \\
+        h : (8, 6) : \\
+             ->Q_{NE} & = \{8 > 5 \land 6 > 5\} \\
+             Q_{NW} & = \{8 \leq 5 \land 6 > 5\} \\
+             Q_{SW} & = \{8 \leq 5 \land 6 \leq 5\} \\
+             Q_{SE} & = \{8 > 5 \land 6 \leq 5\} \\
+      \end{split}
+    \end{equation*}\break
+      \begin{equation*}
+        \begin{split}
+        Q_{NW} : (5, 15) & \\
+        c : (3, 15) : \\
+             Q_{NE} & = \{3 > 5 \land 15 > 15\} \\
+             Q_{NW} & = \{3 \leq 5 \land 15 > 15\} \\
+             ->Q_{SW} & = \{3 \leq 5 \land 15 \leq 15\} \\
+             Q_{SE} & = \{3 > 5 \land 15 \leq 15\} \\
+        e : (4, 19) : \\
+             Q_{NE} & = \{4 > 5 \land 19 > 15\} \\
+             ->Q_{NW} & = \{4 \leq 5 \land 19 > 15\} \\
+             Q_{SW} & = \{4 \leq 5 \land 19 \leq 15\} \\
+             Q_{SE} & = \{4 > 5 \land 19 \leq 15\} \\
+        g : (6, 13) : \\
+             Q_{NE} & = \{6 > 5 \land 13 > 15\} \\
+             Q_{NW} & = \{6 \leq 5 \land 13 > 15\} \\
+             Q_{SW} & = \{6 \leq 5 \land 13 \leq 15\} \\
+             ->Q_{SE} & = \{6 > 5 \land 13 \leq 15\} \\
+          i : (10, 15) : \\
+             Q_{NE} & = \{10 > 5 \land 15 > 15\} \\
+             Q_{NW} & = \{10 \leq 5 \land 15 > 15\} \\
+             Q_{SW} & = \{10 \leq 5 \land 15 \leq 15\} \\
+             ->Q_{SE} & = \{10 > 5 \land 15 \leq 15\} \\
+        \end{split}
+      \end{equation*}
+  \end{multicols}
+  
+  The final quadtree looks like the following.
+  
+  \vspace{1cm}
+  
+\begin{tikzpicture}[x=.035\textwidth,y=.035\textwidth]
+       \node[simple] (1) {X 10, Y 10};
+       \draw[->] (1.center) ++(0, -10pt) -- +(-4,-2) node[simple] (2) {X 5, Y 5};
+       
+       \draw[->] (2.center) ++(0, -10pt) -- +(-3,-2) node[simple] (3) {a,b}; 
+       \draw[->] (2.center) ++(0, -10pt) -- +(-1,-2) node[simple] (3) {$\emptyset$}; 
+       \draw[->] (2.center) ++(0, -10pt) -- +(+1,-2) node[simple] (3) {h}; 
+       \draw[->] (2.center) ++(0, -10pt) -- +(+3,-2) node[simple] (3) {d,f}; 
+       
+       \draw[->] (1.center) ++(0, -10pt) -- +(-1,-2) node[simple] (3) {j,k}; 
+       \draw[->] (1.center) ++(0, -10pt) -- +(+1,-2) node[simple] (4) {l};
+       \draw[->] (1.center) ++(0, -10pt) -- +(+4,-2) node[simple] (5) {X 5, Y 15};
+       
+       \draw[->] (5.center) ++(0, -10pt) -- +(-3,-2) node[simple] (3) {c}; 
+       \draw[->] (5.center) ++(0, -10pt) -- +(-1,-2) node[simple] (3) {g,i}; 
+       \draw[->] (5.center) ++(0, -10pt) -- +(+1,-2) node[simple] (3) {$\emptyset$}; 
+       \draw[->] (5.center) ++(0, -10pt) -- +(+3,-2) node[simple] (3) {e}; 
+  \end{tikzpicture}
+
 \section{Part 2}
 Using the quadtree  learnt  in  4.1 to  find  the nearest neighbor  of  data  point 
 (11,  16).
+
+\begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+        n 11 16
+      };
+       \draw [very thick,dotted] (100,0) -- (100,200);
+      \draw [very thick,dotted] (0,100) -- (200,100);
+      
+       \draw [very thick,dotted] (50,0) -- (50,100);
+      \draw [very thick,dotted] (0,50) -- (100,50);
+      
+      \draw [very thick,dotted] (50,100) -- (50,200);
+      \draw [very thick,dotted] (0,150) -- (100,150);
+    \end{axis}
+  \end{tikzpicture}
+
+Given the tree from problem 4.1 you can see that are new point n would be in the NE quadrant with l which would make l its closest neighbor based on the graph but if you look at the Euclidian distance you can see that i is actually the closet neighbor to n 
+
+\chapter{Question 5}
+
+Given the following 12 data points x=(x1,	x2)	in	the	training	data	set.
+\begin{equation*}
+  (1,	3),	(2,	5),	(3,	15),	(4,	8),	(4,	19),	(5,	6),	(6,	13), \\
+(8,	6),	(10,	15),	(12,	7),	(15,	4),	(17,	18).
+\end{equation*}
+
+\section{Part 1}
+please	build	the	kd-tree.
+
+\begin{tikzpicture}
+    \begin{axis}[
+          xmax=20,
+          xmin=0,
+          ymax=20,
+          ymin=0,
+      ]
+      \addplot[
+        mark=*,
+        only marks,
+        point meta=explicit symbolic,
+        nodes near coords={
+          \pgfkeys{/print label/\pgfplotspointmeta/.try}
+        }
+      ]
+      table[header=false,meta index=0,x index=1,y index=2]{
+        a   1  3
+        b   2  5
+        c   3 15
+        d   4  8
+        e   4 19
+        f   5  6
+        g   6 13
+        h   8  6
+        i  10 15
+        j  12  7
+        k  15  4
+        l  17 18
+      };
+    \end{axis}
+  \end{tikzpicture}
+
+
+Starting with x we will compute are first boundary. 
+
+\begin{equation*}
+   x_{med} = 1 + 2 + 3 + 4 + 4+5+6+8+10+12+15+17
+\end{equation*}
+
+\section{Part 2}	
+5.2.	using the	kd-tree	learnt	in	5.1	to	find	the	nearest	neighbor	of	data	point	(11,	
+16).
+
+\chapter{Question 6}
+
+For	the	play	tennis	data	set	shown	below.
+
+\section{Part 1}
+build	the	decision	tree	by	using	information	gain.
+
+\section{Part 2}
+6.2.	build	the	decision	tree	by	using	information	content.
 
 \end{document}
